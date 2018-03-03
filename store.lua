@@ -36,7 +36,7 @@ function createStore(initialState)
 		__state        = initialState,
 		__eventEmitter = loadstring(Envy:new())(),
 	}
-	setElementData(localPlayer, "multexStore", multexStore)
+
 	stores[storeId] = multexStore
 
 	-- Multex store is ready to be used
