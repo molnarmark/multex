@@ -10,17 +10,21 @@ local function isLocked(id)
 	return stores[id].__locked
 end
 
-local function getState(id)
-	return stores[id].__state
+local function getState(store)
+	return store.__state
 end
 
 local function setState(id, newState)
-	local oldState = getState(__getStoreById(id))
+	local store = __getStoreById(id)
+	local oldState = getState(store)
+	store.__state = newState
 	store.__eventEmitter:emit("changed", oldState, "entire")
 end
 
 local function setStateField(id, field, value)
-	local oldField = __getStateField(__getStoreById(id))
+	local store = __getStoreById(id)
+	local oldField = __getStateField(store)
+	store.__state[field] = value
 	store.__eventEmitter:emit("changed", oldValue, "field")
 end
 
@@ -32,7 +36,7 @@ function createStore(initialState)
 		__state        = initialState,
 		__eventEmitter = loadstring(Envy:new())(),
 	}
-
+	setElementData(localPlayer, "multexStore", multexStore)
 	stores[storeId] = multexStore
 
 	-- Multex store is ready to be used
@@ -49,7 +53,7 @@ function createStore(initialState)
 			end,
 
 			state = function(self)
-				return exports.multex:getState(self.id)
+				return multexStore.__state
 			end,
 
 			on = function(self, eventName, callback)

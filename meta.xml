@@ -8,5 +8,6 @@
   <export function="isLocked" type="client"/>
   <export function="dispatch" type="client"/>
   <export function="getState" type="client"/>
-  <export function="addEventListener" type="client"/>
+  <export function="__getStoreById" type="client"/>
+<export function="createStore" type="client"/>
 </meta>
