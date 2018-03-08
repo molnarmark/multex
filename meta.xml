@@ -1,13 +1,5 @@
 <meta>
-  <script src="vendor/envy.lua" type="client"/>
-  <script src="action.lua" type="client"/>
-  <script src="dispatcher.lua" type="client"/>
   <script src="store.lua" type="client"/>
-  <script src="tester.lua" type="client"/>
 
-  <export function="isLocked" type="client"/>
-  <export function="dispatch" type="client"/>
-  <export function="getState" type="client"/>
-  <export function="__getStoreById" type="client"/>
-<export function="createStore" type="client"/>
+  <export function="createStore" type="client"/>
 </meta>
