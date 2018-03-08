@@ -3,6 +3,8 @@ function createStore()
 		return {
 			__state = {},
 			__events = {},
+			__computedProperties = {},
+
 			__actionHandler = nil,
 			__helpers = {
 				shallowCopy = function(original)
@@ -18,6 +20,10 @@ function createStore()
 				self.__actionHandler = callback
 			end,
 
+			setComputedProperty = function(self, value, callback)
+				self.__computedProperties[value] = callback
+			end,
+
 			dispatch = function(self, name, payload)
 				self.__actionHandler(name, payload)
 			end,
@@ -29,8 +35,13 @@ function createStore()
 			setState = function(self, state)
 				for fieldName, fieldValue in pairs(state) do
 					self.__state[fieldName] = fieldValue
+
+					if self.__computedProperties[fieldName] then
+						self.__computedProperties[fieldName]()
+						self:emit("computed_updated")
+					end
 				end
-				self:emit("update")
+				self:emit("updated")
 			end,
 
 			setInitialState = function(self, initialState)
@@ -56,6 +67,10 @@ end
 local store = loadstring(createStore())()
 store:setInitialState({counter = 0})
 
+store:setComputedProperty("counter", function()
+	outputChatBox("Counter changed")
+end)
+
 store:onAction(function(name, payload)
 	if name == "increment" then
 		outputChatBox("Increment action called with payload of " .. payload.value)
@@ -64,7 +79,7 @@ store:onAction(function(name, payload)
 	end
 end)
 
-store:on("update", function()
+store:on("updated", function()
 	local counter = store:getState().counter
 	outputChatBox("State updated. Counter is now " .. counter)
 end)
