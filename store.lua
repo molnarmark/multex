@@ -74,38 +74,3 @@ function createStore()
 		}
 	]]
 end
-
--- Testing here
-
-local store = loadstring(createStore())()
-store:setInitialState({counter = 0})
-
-store:setComputedProperty("counter", function()
-	outputChatBox("Counter changed")
-end)
-
-store:onAction(function(name, payload)
-	if name == "increment" then
-		outputChatBox("Increment action called with payload of " .. payload.value)
-		local state = store:getState()
-		store:setState({counter = state.counter + 1})
-	end
-end)
-
-store:on("updated", function()
-	local counter = store:getState().counter
-	outputChatBox("State updated. Counter is now " .. counter)
-end)
-
-local actions = {
-	increment = function()
-		store:dispatch("increment", {value = 1})
-	end,
-}
-
-actions.increment()
-actions.increment()
-actions.increment()
-actions.increment()
-actions.increment()
-actions.increment()
