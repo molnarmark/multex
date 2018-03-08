@@ -38,10 +38,10 @@ function createStore()
 
 					if self.__computedProperties[fieldName] then
 						self.__computedProperties[fieldName]()
-						self:emit("computed_updated")
+						self:emit("computed_update")
 					end
 				end
-				self:emit("updated")
+				self:emit("update")
 			end,
 
 			setInitialState = function(self, initialState)
