@@ -1,6 +1,7 @@
 function createStore()
 	return [[
 		return {
+			__hooks = {},
 			__state = {},
 			__events = {},
 			__computedProperties = {},
@@ -24,8 +25,20 @@ function createStore()
 				self.__computedProperties[value] = callback
 			end,
 
+			setHook = function(hookName, callback)
+				self.__hooks[hookName] = callback
+			end,
+
 			dispatch = function(self, name, payload)
+				if self.__hooks["beforeAction"] then
+					self.__hooks["beforeAction"](name, payload)
+				end
+
 				self.__actionHandler(name, payload)
+
+				if self.__hooks["afterAction"] then
+					self.__hooks["afterAction"](name, payload)
+				end
 			end,
 
 			getState = function(self)
